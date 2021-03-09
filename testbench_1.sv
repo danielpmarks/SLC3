@@ -27,22 +27,6 @@ Continue = 0;
 #6 Continue = 1; //Start execution
 Run = 0;
 
-#6 Continue = 0;
-Run = 1;
-
-#6 Continue = 1;
-
-#6 Continue = 0;
-
-#6 Continue = 1;
-
-#6 Continue = 0;
-
-#6 Continue = 1;
-
-#6 Continue = 0;
-
-
 end
 
 endmodule

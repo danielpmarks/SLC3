@@ -44,11 +44,11 @@ logic [1:0] PCMUX, ADDR2MUX, ALUK;
 logic DRMUX, SR1MUX;
 logic [15:0] MDR_In;
 logic [15:0] MAR, MDR, IR, PC;
-
-HexDriver Hex_3(IR[15:12], HEX3);
-HexDriver Hex_2(IR[11:8], HEX2);
-HexDriver Hex_1(IR[7:4], HEX1);
-HexDriver Hex_0(IR[3:0], HEX0);
+HexDriver hex_drivers[3:0] (hex_4, {HEX3, HEX2, HEX1, HEX0});
+//HexDriver Hex_3(IR[15:12], HEX3);
+//HexDriver Hex_2(IR[11:8], HEX2);
+//HexDriver Hex_1(IR[7:4], HEX1);
+//HexDriver Hex_0(IR[3:0], HEX0);
 
 
 // Connect MAR to ADDR, which is also connected as an input into MEM2IO

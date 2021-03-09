@@ -2,7 +2,7 @@ module adder_16 (
     input [15:0] A, B,
     input cin,
     output [15:0] S,
-    output cout;
+    output cout
 );
 	// The design is 4x4 hierarchical, so it is split into 4 parts
 	// CLU One -> P0-3 and G0-3 are portions of the P and G signals

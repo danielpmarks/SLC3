@@ -25,8 +25,8 @@ module datapath(
 				  
               input logic MIO_EN,
               input logic [15:0] MDR_In,
-              output logic [15:0] MAR,MDR,PC,IR;
-              output logic BEN;
+              output logic [15:0] MAR,MDR,PC,IR,
+              output logic BEN
 );
 
        logic [15:0] Data;
@@ -36,32 +36,32 @@ module datapath(
        logic [2:0] DR, SR1,SR2;
        logic N,Z,P, N_in, Z_in, P_in;
        logic BEN_in;
-       SR2 = IR[2:0];
+       assign SR2 = IR[2:0];
 
 
        always_comb begin : NZP_Logic
               N_in = Data[15];
               Z_in = Data == 16'h00 ? 1'b1 : 1'b0;
               P_in = ~Data[15];
-              BEN_in = IR[11:9] & {N,Z,P} ? 1'b1, 1'b0;
+              BEN_in = IR[11:9] & {N,Z,P} ? 1'b1 : 1'b0;
 
        end
 
        // NZP registers
-       reg_1 N_reg(.Clk(Clk), .Reset(Reset), .Load(LD_CC), .D(N_in), Data_Out(N));
-       reg_1 Z_reg(.Clk(Clk), .Reset(Reset), .Load(LD_CC), .D(Z_in), Data_Out(Z));
-       reg_1 P_reg(.Clk(Clk), .Reset(Reset), .Load(LD_CC), .D(P_in), Data_Out(P));
+       reg_1 N_reg(.Clk(Clk), .Reset(Reset), .Load(LD_CC), .D(N_in), .Data_Out(N));
+       reg_1 Z_reg(.Clk(Clk), .Reset(Reset), .Load(LD_CC), .D(Z_in), .Data_Out(Z));
+       reg_1 P_reg(.Clk(Clk), .Reset(Reset), .Load(LD_CC), .D(P_in), .Data_Out(P));
 
-       reg_1 BEN_reg(.Clk(Clk),.Reset(Reset), .Load(LD_BEN),.D(BEN_in), .Data_Out(BEN))
+       reg_1 BEN_reg(.Clk(Clk),.Reset(Reset), .Load(LD_BEN),.D(BEN_in), .Data_Out(BEN));
 
        always_comb begin : ADDERS_MUX
               ADDER1 = ADDR1MUX ? SR1_OUT : PC;
-              ADDER2 = 16'd0;
+              //ADDER2 = 16'd0;
               unique case(ADDR2MUX)
                      2'b00: ADDER2 = 16'd0;
-                     2'b01: ADDER2 = {5{IR[10]}, IR[10:0]};
-                     2'b10: ADDER2 = {7{IR[8]}, IR[8:0]};
-                     2'b11: ADDER2 = {10{IR[5]}, IR[5:0]};
+                     2'b01: ADDER2 = {{5{IR[10]}}, IR[10:0]};
+                     2'b10: ADDER2 = {{7{IR[8]}}, IR[8:0]};
+                     2'b11: ADDER2 = {{10{IR[5]}}, IR[5:0]};
               endcase
        end
 
@@ -99,11 +99,11 @@ module datapath(
        end
 
        always_comb begin : SR2_MUX
-
+				SR2_MUX_OUT = SR2_OUT;
               unique case(SR2MUX)
-                     SR2_MUX_OUT = SR2_OUT;
+                     
                      1'b0: SR2_MUX_OUT = SR2_OUT;
-                     1'b0: SR2_MUX_OUT = {11{IR[4]}, IR[4:0]}; /* Set the SR2 MUX out to immediate value from IR */
+                     1'b0: SR2_MUX_OUT = {{11{IR[4]}}, IR[4:0]}; /* Set the SR2 MUX out to immediate value from IR */
               endcase
        end
        

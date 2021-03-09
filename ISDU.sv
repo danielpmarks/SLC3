@@ -52,7 +52,7 @@ module ISDU (   input logic         Clk,
 									Mem_WE
 				);
 
-	enum logic [3:0] {  Halted, 
+	enum logic [4:0] {  Halted, 
 						PauseIR1, 
 						PauseIR2, 
 						S_18, 
@@ -64,7 +64,7 @@ module ISDU (   input logic         Clk,
 						S_05,
 						S_09,
 						S_06,
-						S_25_1
+						S_25_1,
 						S_25_2,
 						S_27,
 						S_07,
@@ -74,9 +74,9 @@ module ISDU (   input logic         Clk,
 						S_16_3,
 						S_04,
 						S_21,
-						S_21,
+						S_12,
 						S_00,
-						S_22,}   State, Next_state;   // Internal state logic
+						S_22}   State, Next_state;   // Internal state logic
 		
 	always_ff @ (posedge Clk)
 	begin
@@ -250,7 +250,7 @@ module ISDU (   input logic         Clk,
 			/* AND */
 			S_05 :
 				begin
-					SR1MUX = 1'b1
+					SR1MUX = 1'b1;
 					SR2MUX = IR_5;
 					ALUK = 2'b01;
 					GateALU = 1'b1;
