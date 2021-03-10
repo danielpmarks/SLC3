@@ -132,7 +132,7 @@ module ISDU (   input logic         Clk,
 			S_33_2 : 
 				Next_state = S_35;
 			S_35 : 
-				Next_state = S_35;
+				Next_state = S_32;
 			// PauseIR1 and PauseIR2 are only for Week 1 such that TAs can see 
 			// the values in IR.
 			PauseIR1 : 
@@ -199,7 +199,10 @@ module ISDU (   input logic         Clk,
 			S_12 :
 				Next_state = S_18;
 			S_00 :
-				Next_state = S_22;
+				if(BEN)
+					Next_state = S_22;
+				else
+					Next_state = S_18;
 			S_22 :
 				Next_state = S_18;
 
@@ -257,6 +260,70 @@ module ISDU (   input logic         Clk,
 					LD_REG = 1'b1;
 					DRMUX = 1'b0;
 				end
+			
+			/* LDR */
+			S_06:
+				begin
+					LD_MAR = 1'b1;	// Load MAR
+					SR1MUX = 1'b1;	// Load register from IR[8:6]
+					ADDR2MUX = 2'b01;	// Add offset6
+					ADDR1MUX = 1'b1;	// Add from base register
+					GateMARMUX = 1'b1;	// Load MAR from adder
+				end
+			S_25_1:
+				begin
+					Mem_OE = 1'b1;	// Memory read enable
+
+				end
+			S_25_2:
+				begin
+					LD_MDR = 1'b1;	// Load MDR
+					Mem_OE = 1'b1;	// Memory read enable
+				end
+			S_27:
+				begin
+					LD_REG = 1'b1;	// Load register
+					GateMDR = 1'b1;	// Load from MDR
+					DRMUX = 1'b0;	// Load into register IR[11:9]
+				end
+			
+			/* STR */
+			S_07:
+				begin
+					LD_MAR = 1'b1;	// Load MAR
+					SR1MUX = 1'b1;	// Load register from IR[8:6]
+					ADDR2MUX = 2'b01;	// Add offset6
+					ADDR1MUX = 1'b1;	// Add from base register
+					GateMARMUX = 1'b1;	// Load MAR from adder
+				end
+			S_23:
+				begin
+					LD_MDR = 1'b1;	//Load MDR
+					GateALU = 1'b1;	// Load from ALU
+					ALUK = 2'b11;	// ALU = PassA
+					SR1MUX = 1'b0;	// Set source register to IR[11:9]
+					Mem_OE = 1'b0;	// Load MDR from data bus
+				end
+			S_16_1:
+				begin
+					Mem_WE = 1'b1;	//Write enable for memory system
+				end
+			S_16_2:
+				begin
+					Mem_WE = 1'b1;	//Write enable for memory system
+				end
+			S_16_3:
+				begin
+					Mem_WE = 1'b1;	//Write enable for memory system
+				end
+			S_22:
+				begin
+					LD_PC = 1'b1;	// Load PC
+					ADDR1MUX = 1'b0;	// Select PC
+					ADDR2MUX = 2'b10;	// Select offset9
+					PCMUX = 2'b10;	// Load PC from the adder
+				end
+			
 
 
 			default : ;

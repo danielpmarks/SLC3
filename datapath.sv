@@ -135,9 +135,8 @@ module datapath(
        end
 
        always_comb begin : MDR_MUX //MUX input to the MDR
-              MDR_Data = Data;
-              if (MIO_EN)
-                     MDR_Data = MDR_In;
+              // MIO_EN is active low
+              MDR_Data = MIO_EN ? MDR_In : Data;
        end
 
       

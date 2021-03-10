@@ -18,7 +18,7 @@ end
 initial begin: INITIALIZE
 Continue = 1;
 Run = 1;
-SW = 10'h00;
+SW = 10'h03;
 Clk = 1;
 
 #2 Run = 0; //Reset

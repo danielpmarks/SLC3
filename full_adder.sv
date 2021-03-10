@@ -1,7 +1,7 @@
 module full_addr
 (
 	input  a,b,cin,
-	output s, cout
+	output logic s, cout
 );
 
 	always_comb
