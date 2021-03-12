@@ -32,7 +32,7 @@ module slc3(
 // For Lab 1, they will direclty be connected to the IR register through an always_comb circuit
 // For Lab 2, they will be patched into the MEM2IO module so that Memory-mapped IO can take place
 logic [3:0] hex_4[3:0]; 
-//HexDriver hex_drivers[3:0] (hex_4, {HEX3, HEX2, HEX1, HEX0});
+HexDriver hex_drivers[3:0] (hex_4, {HEX3, HEX2, HEX1, HEX0});
 // This works thanks to http://stackoverflow.com/questions/1378159/verilog-can-we-have-an-array-of-custom-modules
 
 // Internal connections
@@ -44,7 +44,6 @@ logic [1:0] PCMUX, ADDR2MUX, ALUK;
 logic DRMUX, SR1MUX;
 logic [15:0] MDR_In;
 logic [15:0] MAR, MDR, IR, PC;
-HexDriver hex_drivers[3:0] (hex_4, {HEX3, HEX2, HEX1, HEX0});
 //HexDriver Hex_3(IR[15:12], HEX3);
 //HexDriver Hex_2(IR[11:8], HEX2);
 //HexDriver Hex_1(IR[7:4], HEX1);
@@ -61,7 +60,7 @@ datapath d0 (.Clk(Clk),.Reset(Reset),.LD_MAR(LD_MAR),.LD_MDR(LD_MDR),.LD_IR(LD_I
 		.GatePC(GatePC), .GateMDR(GateMDR), .GateALU(GateALU), .GateMARMUX(GateMARMUX),
 		.PCMUX(PCMUX), .DRMUX(DRMUX), .SR1MUX(SR1MUX), .SR2MUX(SR2MUX), .ADDR1MUX(ADDR1MUX),
 		.ADDR2MUX(ADDR2MUX), .ALUK(ALUK), .MIO_EN(MIO_EN), .MDR_In(MDR_In),
-		.MAR(MAR),.MDR(MDR),.PC(PC),.IR(IR), .BEN(BEN));
+		.MAR(MAR),.MDR(MDR),.PC(PC),.IR(IR), .BEN(BEN), .LED(LED));
 
 // Break the tri-state bus to the ram into input/outputs 
 // Our SRAM and I/O controller (note, this plugs into MDR/MAR
@@ -81,14 +80,14 @@ ISDU state_controller(
 );
 
 // SRAM WE register
-//logic SRAM_WE_In, SRAM_WE;
-//// SRAM WE synchronizer
-//always_ff @(posedge Clk or posedge Reset_ah)
-//begin
-//	if (Reset_ah) SRAM_WE <= 1'b1; //resets to 1
-//	else 
-//		SRAM_WE <= SRAM_WE_In;
-//end
+logic SRAM_WE_In, SRAM_WE;
+// SRAM WE synchronizer
+always_ff @(posedge Clk or posedge Reset)
+begin
+	if (Reset) SRAM_WE <= 1'b1; //resets to 1
+	else 
+		SRAM_WE <= SRAM_WE_In;
+end
 
 	
 endmodule

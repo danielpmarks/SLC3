@@ -12,8 +12,8 @@ module adder_16 (
 	logic C0, C4, C8, C12;
 
 	//
-	assign Pg = P0 & P1 & P2 & P3;
-	assign Gg = G3 | (G2 & P3)|(G1 & P3 & P2)|(G0 & P3 & P2 & P1);
+	//assign Pg = P0 & P1 & P2 & P3;
+	//assign Gg = G3 | (G2 & P3)|(G1 & P3 & P2)|(G0 & P3 & P2 & P1);
 
 	// Carry bits for CLAs
 	assign C0 = (cin);
@@ -27,6 +27,6 @@ module adder_16 (
 	CLA CLU1 (.A(A[3:0]),.B(B[3:0]),.cin(C0),.S(S[3:0]),.cout(), .P(P0), .G(G0));
 	CLA CLU2 (.A(A[7:4]),.B(B[7:4]),.cin(C4),.S(S[7:4]),.cout(), .P(P1), .G(G1));
 	CLA CLU3 (.A(A[11:8]),.B(B[11:8]),.cin(C8),.S(S[11:8]),.cout(), .P(P2), .G(G2));
-	CLA CLU4 (.A(A[15:13]),.B(B[15:13]),.cin(C12),.S(S[15:13]),.cout(), .P(P3), .G(G3));
+	CLA CLU4 (.A(A[15:12]),.B(B[15:12]),.cin(C12),.S(S[15:12]),.cout(), .P(P3), .G(G3));
 
 endmodule

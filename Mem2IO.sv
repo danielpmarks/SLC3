@@ -26,12 +26,12 @@ module  Mem2IO ( 	input logic Clk, Reset,
 	// Load data from switches when address is xFFFF, and from SRAM otherwise.
 	always_comb
     begin 
-        Data_to_CPU = 16'd0;
+        Data_to_CPU = Data_from_SRAM;
         if (~WE && OE) 
 			if (ADDR[15:0] == 16'hFFFF) 
 				Data_to_CPU = {6'b000000,Switches};
-			else 
-				Data_to_CPU = Data_from_SRAM;
+			//else 
+				//Data_to_CPU = ;
     end
 
     // Pass data from CPU to SRAM

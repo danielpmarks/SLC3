@@ -57,7 +57,8 @@ module ISDU (   input logic         Clk,
 						PauseIR2, 
 						S_18, 
 						S_33_1, 
-						S_33_2, 
+						S_33_2,
+						S_33_3, 
 						S_35, 
 						S_32, 
 						S_01,
@@ -130,6 +131,8 @@ module ISDU (   input logic         Clk,
 			S_33_1 : 
 				Next_state = S_33_2;
 			S_33_2 : 
+				Next_state = S_33_3;
+			S_33_3 :
 				Next_state = S_35;
 			S_35 : 
 				Next_state = S_32;
@@ -229,6 +232,11 @@ module ISDU (   input logic         Clk,
 					Mem_OE = 1'b1;
 					LD_MDR = 1'b1;
 				end
+			S_33_3:
+				begin
+					Mem_OE = 1'b1;
+					LD_MDR = 1'b1;
+				end	
 			S_35 : 
 				begin 
 					GateMDR = 1'b1;
@@ -238,7 +246,6 @@ module ISDU (   input logic         Clk,
 			PauseIR2: ;
 			S_32 : 
 				LD_BEN = 1'b1;
-
 			/* ADD */
 			S_01 : 
 				begin 
@@ -248,6 +255,7 @@ module ISDU (   input logic         Clk,
 					GateALU = 1'b1;
 					LD_REG = 1'b1;	//Load destination register
 					DRMUX = 1'b0;	//DR select from IR[11:9]
+					LD_CC = 1'b1;
 				end
 
 			/* AND */
@@ -259,6 +267,16 @@ module ISDU (   input logic         Clk,
 					GateALU = 1'b1;
 					LD_REG = 1'b1;
 					DRMUX = 1'b0;
+					LD_CC = 1'b1;
+				end
+			/* NOT */
+			S_09:
+				begin
+					SR1MUX = 1'b1;	//Select SR1 as IR[8:6]
+					ALUK = 2'b10;	//Not A
+					GateALU = 1'b1;	// Load from ALU
+					LD_REG = 1'b1;	// Load register
+					DRMUX = 1'b0;	// Set DR to IR[11:9]
 				end
 			
 			/* LDR */
@@ -285,6 +303,7 @@ module ISDU (   input logic         Clk,
 					LD_REG = 1'b1;	// Load register
 					GateMDR = 1'b1;	// Load from MDR
 					DRMUX = 1'b0;	// Load into register IR[11:9]
+					LD_CC = 1'b1;
 				end
 			
 			/* STR */
@@ -316,12 +335,39 @@ module ISDU (   input logic         Clk,
 				begin
 					Mem_WE = 1'b1;	//Write enable for memory system
 				end
+
+			/* BR */
 			S_22:
 				begin
 					LD_PC = 1'b1;	// Load PC
 					ADDR1MUX = 1'b0;	// Select PC
 					ADDR2MUX = 2'b10;	// Select offset9
 					PCMUX = 2'b10;	// Load PC from the adder
+				end
+
+			/* JMP */
+			S_12:
+				begin
+					LD_PC = 1'b1;	// Load PC
+					SR1MUX = 1'b1;	// Set SR1 to IR[8:6]
+					ALUK = 2'b11;	// Pass A
+					GateALU = 1'b1;	// Pass data from ALU to bus
+					PCMUX = 2'b01;	// Load PC from data bus
+				end
+
+			/* JSR */
+			S_04:
+				begin
+					LD_REG = 1'b1;	// Load register
+					GatePC = 1'b1;	// Load from PC
+					DRMUX = 1'b1;	// Set destination register to R7
+				end
+			S_21:
+				begin
+					LD_PC = 1'b1;	// Load PC
+					PCMUX = 2'b10;	// Load from adder
+					ADDR1MUX = 1'b0;	// Set adder1 to PC
+					ADDR2MUX = 2'b11;	// Set adder2 to offset11
 				end
 			
 
