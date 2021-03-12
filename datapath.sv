@@ -42,9 +42,9 @@ module datapath(
 
        always_comb begin : NZP_Logic
               N_in = Data[15];
-              Z_in = Data == 16'h00 ? 1'b1 : 1'b0;
-              P_in = ~Data[15];
-              BEN_in = IR[11:9] & {N,Z,P} ? 1'b1 : 1'b0;
+              Z_in = Data == 16'h0000 ? 1'b1 : 1'b0;
+              P_in = (~Data[15]) & (~Z_in);
+              BEN_in = (IR[11]&N)|(IR[10]&Z)|(IR[9]&P);
 
        end
 

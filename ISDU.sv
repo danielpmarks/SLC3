@@ -67,6 +67,7 @@ module ISDU (   input logic         Clk,
 						S_06,
 						S_25_1,
 						S_25_2,
+						S_25_3,
 						S_27,
 						S_07,
 						S_23,
@@ -182,6 +183,8 @@ module ISDU (   input logic         Clk,
 			S_25_1 :
 				Next_state = S_25_2;
 			S_25_2 :
+				Next_state = S_25_3;
+			S_25_3 :
 				Next_state = S_27;
 			S_27 :
 				Next_state = S_18;
@@ -294,6 +297,11 @@ module ISDU (   input logic         Clk,
 
 				end
 			S_25_2:
+				begin
+					LD_MDR = 1'b1;	// Load MDR
+					Mem_OE = 1'b1;	// Memory read enable
+				end
+			S_25_3:
 				begin
 					LD_MDR = 1'b1;	// Load MDR
 					Mem_OE = 1'b1;	// Memory read enable
