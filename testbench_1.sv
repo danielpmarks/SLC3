@@ -26,7 +26,7 @@ end
 initial begin: INITIALIZE
 Continue = 1;
 Run = 1;
-SW = 10'h14;
+SW = 10'h7;
 Clk = 1;
 
 #2 Run = 0; //Reset
@@ -38,35 +38,72 @@ Run = 0;
 #2 Run = 1;
 
 // I/O Test 1
-//#100 SW = 10'h07;
-//
-//#10 Continue = 0;
-//
-//#2 Continue = 1;
-//
-//#100 SW = 10'h20;
-//
-//#10 Continue = 0;
-//
-//#2 Continue = 1;
 
+#110 Continue = 0;
 
-// XOR Test
-#100
-SW = 10'b0010110110;
-Continue = 0;
+#2 Continue = 1;
 
-#2 
-Continue = 1;
+#60 SW = 10'h20;
 
-#50
-SW = 10'b1100101101;
-Continue = 0;
+#20 Continue = 0;
 
-#2 
-Continue = 1;
+#2 Continue = 1;
 
+#60 SW = 10'h145;
+
+#14 Continue = 0;
+
+#2 Continue = 1;
 
 end
+
+
+//initial begin: INITIALIZE
+//Continue = 1;
+//Run = 1;
+//SW = 10'h14;
+//Clk = 1;
+//
+//#2 Run = 0; //Reset
+//Continue = 0;
+//
+//#6 Continue = 1; //Start execution
+//Run = 0;
+//
+//#2 Run = 1;
+//// XOR Test
+//#100
+//SW = 10'b0010110110;
+//Continue = 0;
+//
+//#2 
+//Continue = 1;
+//
+//#50
+//SW = 10'b1100101101;
+//Continue = 0;
+//
+//#2 
+//Continue = 1;
+//end
+
+//initial begin: INITIALIZE
+//Continue = 1;
+//Run = 1;
+//SW = 10'h5A;
+//Clk = 1;
+//
+//#2 Run = 0; //Reset
+//Continue = 0;
+//
+//#6 Continue = 1; //Start execution
+//Run = 0;
+//
+//#2 Run = 1;
+//
+//# SW = 16'hA1;
+
+
+//end
 
 endmodule
