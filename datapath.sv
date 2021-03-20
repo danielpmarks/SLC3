@@ -104,7 +104,7 @@ module datapath(
               unique case(SR2MUX)
                      
                      1'b0: SR2_MUX_OUT = SR2_OUT;
-                     1'b0: SR2_MUX_OUT = {{11{IR[4]}}, IR[4:0]}; /* Set the SR2 MUX out to immediate value from IR */
+                     1'b1: SR2_MUX_OUT = {{11{IR[4]}}, IR[4:0]}; /* Set the SR2 MUX out to immediate value from IR */
               endcase
        end
        
